@@ -1,1 +1,0 @@
-# KivyCV2PhotoFilterApp
