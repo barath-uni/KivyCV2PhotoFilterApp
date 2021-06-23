@@ -17,7 +17,7 @@ class MainApp(MDApp):
         self.label = MDLabel()
         layout.add_widget(self.image)
         layout.add_widget(self.label)
-        self.face_facade = cv2.CascadeClassifier("haarcascade_smile.xml")
+        self.face_facade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
         self.save_img_button = MDRaisedButton(
             text="CLICK HERE",
             pos_hint={'center_x': .5, 'center_y': .5},
@@ -32,11 +32,10 @@ class MainApp(MDApp):
         ret, frame = self.capture.read()
         # Frame initialize
         self.image_frame = frame
-        gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        faces = self.face_facade.detectMultiScale(gray, 4.6, 5)
-        for (x, y, w, h) in faces:
-            cv2.rectangle(gray, (x, y), (x + w, y + h), (255, 0, 0), 2)
-        # edge = cv2.Canny(gray, 10, 100)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        smile = self.face_facade.detectMultiScale(gray, 1.5, 4)
+        for (x, y, w, h) in smile:
+            cv2.rectangle(gray, (x, y), (x+w, y+h), (255, 0, 0), 3)
         buffer = cv2.flip(gray, 0).tostring()
         texture = Texture.create(size=(gray.shape[1], gray.shape[0]), colorfmt='luminance')
         texture.blit_buffer(buffer, colorfmt='luminance', bufferfmt='ubyte')
